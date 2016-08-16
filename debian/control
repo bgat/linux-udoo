@@ -1,0 +1,12 @@
+Source: linux-udoo
+Section: unknown
+Priority: extra
+Maintainer: Bill Gatliff <bgat@saturn.billgatliff.com>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+
+Package: linux-udoo
+Architecture: all
+Depends: ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
