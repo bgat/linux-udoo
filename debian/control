@@ -1,12 +1,27 @@
 Source: linux-udoo
-Section: unknown
+Section: kernel
 Priority: extra
-Maintainer: Bill Gatliff <bgat@saturn.billgatliff.com>
-Build-Depends: debhelper (>= 9)
+Maintainer: Bill Gatliff <bgat@.billgatliff.com>
+Build-Depends: debhelper (>= 9), module-init-tools
 Standards-Version: 3.9.5
 
 Package: linux-udoo
-Architecture: all
+Architecture: armhf armel
 Depends: ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Description: Linux kernel and modules for UDOO
+ This package is a part of Pragmatux (http://pragmatux.org).
+ UDOO is a product of SECO USA, Inc. (http://udoo.org).
+
+Package: firmware-udoo
+Architecture: armhf armel
+Depends: ${misc:Depends}
+Description: Firmware for UDOO
+ This package is a part of Pragmatux (http://pragmatux.org).
+ UDOO is a product of SECO USA, Inc. (http://udoo.org).
+
+#Package: dtb-udoo
+#Architecture: armhf armel
+#Depends: ${misc:Depends}
+#Description: Device Tree Blob for UDOO
+# This package is a part of Pragmatux (http://pragmatux.org).
+# UDOO is a product of SECO USA, Inc. (http://udoo.org).

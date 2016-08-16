@@ -1,4 +1,44 @@
 #!/usr/bin/make -f
+export DH_VERBOSE=1
+
+ARCH=$(DEB_HOST_GNU_CPU)
+CROSS_COMPILE=$(DEB_HOST_GNU_TYPE)-
+
+JOBS=$(shell expr 2 \* $(shell cat /proc/cpuinfo | grep processor | wc -l))
+KARGS=ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -j$(JOBS) V=1 KCONFIG_CONFIG=./config
+DESTDIR=debian/linux-udoo
+DESTDIR_FW=debian/firmware-udoo
+
+#DTB_UDOO=arch/arm/boot/dts/TODO-udoo.dtb
+#DESTDIR_DTB_UDOO=debian/dtb-udoo
+
+KERNELRELEASE=$(shell cut -f 2 -d '"' $(CURDIR)/include/generated/utsrelease.h | cut -f 1 -d '"')
 
 %:
-	dh $@ 
+	dh $@
+
+override_dh_auto_clean:
+	$(MAKE) $(KARGS) distclean
+	rm -rf $(DESTDIR) $(DESTDIR_FW)
+
+override_dh_auto_build:
+	$(MAKE) $(KARGS) oldconfig
+	$(MAKE) $(KARGS) uImage
+	$(MAKE) $(KARGS) modules
+#	$(MAKE) $(KARGS) dtbs
+
+override_dh_auto_install:
+	mkdir -p $(DESTDIR)/boot
+	cp arch/arm/boot/uImage $(DESTDIR)/boot
+	cp System.map $(DESTDIR)/boot/System.map-$(KERNELRELEASE)
+	gzip --stdout config > $(DESTDIR)/boot/config.gz
+	$(MAKE) $(KARGS) INSTALL_MOD_PATH=$(DESTDIR) modules_install
+	rm -f $(DESTDIR)/lib/modules/*/build $(DESTDIR)/lib/modules/*/source
+	$(MAKE) $(KARGS) INSTALL_FW_PATH=$(DESTDIR_FW)/lib/firmware firmware_install
+#	mkdir -p $(DESTDIR_DTB_UDOO)/boot
+#	cp $(DTB_UDOO) $(DESTDIR_DTB_UDOO)/boot/dtb
+
+override_dh_auto_configure:
+override_dh_auto_test:
+	true # pass
+
