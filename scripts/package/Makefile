@@ -89,7 +89,7 @@ quiet_cmd_builddeb = BUILDDEB
 deb-pkg: FORCE
 	$(call cmd,builddeb)
 
-clean-dirs += $(objtree)/debian/
+#clean-dirs += $(objtree)/debian/
 
 
 # tarball targets
